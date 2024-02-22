@@ -1,0 +1,132 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="description"
+      content="Emoji Icons - Online Text Editor to paste and keep text, great for notes, todos and links."
+    />
+    <title>Emoji Icons - Simple Online Text Editor</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <script src="emojipicker.js"></script>
+  </head>
+  <body>
+    <section>
+      <svg
+        id="svg"
+        xmlns="http://www.w3.org/2000/svg"
+        height="192"
+        width="192"
+        style="background-color: #ff4500"
+        viewBox="0 0 100 100"
+      >
+        <text y="1.15em" x="16" font-size="65">🦊</text>
+      </svg>
+      <h3>Pick an emoji</h3>
+      <div class="emoji-picker">
+        <input
+          id="emojiPicker"
+          type="text"
+          data-emoji-picker="true"
+          onchange="updateEmoji()"
+          disabled
+        />
+      </div>
+      <h3>Pick a color</h3>
+      <input
+        id="colorPicker"
+        type="color"
+        oninput="updateColor()"
+        value="#ff4500"
+      />
+      <h3>Pick a size</h3>
+      <select id="sizes">
+        <option value="48">48x48</option>
+        <option value="96">96x96</option>
+        <option value="114">114x114</option>
+        <option value="128">128x128</option>
+        <option selected value="192">192x192</option>
+        <option value="256">256x256</option>
+        <option value="384">384x384</option>
+        <option value="512">512x512</option>
+      </select>
+      <br /><br />
+      <button onclick="downloadImg(event)">Download Image</button>
+    </section>
+  </body>
+  <script>
+    document.getElementById("sizes").addEventListener("change", function () {
+      var select = document.getElementById("sizes");
+      const svg = document.getElementById("svg");
+      svg.setAttribute("height", select.value);
+      svg.setAttribute("width", select.value);
+    });
+
+    function downloadImg() {
+      const svg = document.getElementById("svg").outerHTML;
+
+      svgUrlToPng(svg);
+
+      function svgUrlToPng(svg) {
+        const svgUrl = URL.createObjectURL(
+          new Blob([svg], { type: "image/svg+xml" })
+        );
+
+        const svgImage = document.createElement("img");
+        svgImage.id = "image";
+        svgImage.src = svgUrl;
+
+        svgImage.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = svgImage.clientWidth;
+          canvas.height = svgImage.clientHeight;
+          const canvasCtx = canvas.getContext("2d");
+          canvasCtx.drawImage(svgImage, 0, 0);
+          const imgData = canvas.toDataURL("image/png");
+
+          var select = document.getElementById("sizes");
+          var a = document.createElement("a");
+          a.href = imgData;
+          a.download = "icon-" + select.value + "x" + select.value + ".png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          document.body.removeChild(svgImage);
+        };
+
+        document.body.appendChild(svgImage);
+      }
+    }
+
+    function updateColor() {
+      const svg = document.getElementById("svg");
+      const colorPicker = document.getElementById("colorPicker");
+      svg.style.backgroundColor = colorPicker.value;
+    }
+
+    function updateEmoji() {
+      const svg = document.getElementById("svg");
+      const emojiPicker = document.getElementById("emojiPicker");
+
+      svg.innerHTML =
+        '<text y="1em" x="10" font-size="80">' + emojiPicker.value + "</text>";
+    }
+
+    new EmojiPicker();
+  </script>
+  <style type="text/css">
+    input[type="color"] {
+      width: 100px;
+    }
+
+    .emoji-picker {
+      width: 200px;
+    }
+  </style>
+</html>
