@@ -27,9 +27,27 @@
         height="192"
         width="192"
         style="background-color: #ff4500"
-        viewBox="0 0 100 100"
       >
-        <text y="1.15em" x="16" font-size="65">🦊</text>
+        <text
+          x="50%"
+          y="50%"
+          style="
+            dominant-baseline: central;
+            text-anchor: middle;
+            font-size: 100px;
+          "
+        >
+          🦊
+        </text>
+        <!-- <text
+          x="50%"
+          y="58%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          font-size="100"
+        >
+          🦊
+        </text> -->
       </svg>
       <h3>Pick an emoji</h3>
       <div class="emoji-picker">
@@ -120,7 +138,9 @@
       const emojiPicker = document.getElementById("emojiPicker");
 
       svg.innerHTML =
-        '<text y="1em" x="10" font-size="80">' + emojiPicker.value + "</text>";
+        '<text  x="50%" y="50%" style=" dominant-baseline: central; text-anchor: middle; font-size: 100px; ">' +
+        emojiPicker.value +
+        "</text>";
     }
 
     new EmojiPicker();
